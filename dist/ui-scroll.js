@@ -1,7 +1,7 @@
 /*!
  * angular-ui-scroll (uncompressed)
  * https://github.com/angular-ui/ui-scroll
- * Version: 1.7.0-rc.5 -- 2017-11-10T00:53:20.545Z
+ * Version: 1.7.0-rc.5 -- 2018-06-28T13:49:39.292Z
  * License: MIT
  */
 /******/ (function(modules) { // webpackBootstrap
@@ -1074,6 +1074,12 @@ function Viewport(elementRoutines, buffer, element, viewportController, $rootSco
       // paddings combine adjustment
       topPadding.height(topPaddingHeight + topPaddingHeightAdd);
       bottomPadding.height(bottomPaddingHeight + bottomPaddingHeightAdd);
+
+      if (buffer.eof) {
+        bottomPadding.height(0);
+      } else if (buffer.bof) {
+        topPadding.height(0);
+      }
     },
     onAfterMinIndexSet: function onAfterMinIndexSet(topPaddingHeightOld) {
       // additional scrollTop adjustment in case of datasource.minIndex external set
