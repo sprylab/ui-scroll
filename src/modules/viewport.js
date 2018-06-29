@@ -210,7 +210,31 @@ export default function Viewport(elementRoutines, buffer, element, viewportContr
     removeItem(item) {
       this.removeCacheItem(item);
       return buffer.remove(item);
-    }
+    },
+      removeByReference(reference) {
+
+          console.log("reference", reference);
+
+          var itemAbove = topPadding.cache.getItemByReference(reference);
+          var itemBelow = bottomPadding.cache.getItemByReference(reference);
+
+          if(!itemAbove && !itemBelow){
+              return;
+          }
+
+          console.log("remove item from cache", itemAbove || itemBelow);
+          this.removeCacheItem(itemAbove || itemBelow);
+
+          if(itemAbove){
+              console.log("item is from top padding");
+              // we try to delete a hidden item above
+              buffer.next --;
+              buffer.first--;
+              console.log("decremented buffer indices to buffer.next, buffer.first", buffer.next, buffer.first);
+          }
+
+          return true;
+      },
   });
 
   return viewport;

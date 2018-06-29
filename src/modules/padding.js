@@ -10,9 +10,22 @@ class CacheProto {
     }
     this.push({
       index: item.scope.$index,
-      height: item.element.outerHeight()
+      height: item.element.outerHeight(),
+      reference: item.item.timestamp_published, // FIXME generic "reference" attribute should be provided
+      item: item
     });
     this.sort((a, b) => ((a.index < b.index) ? -1 : ((a.index > b.index) ? 1 : 0)));
+  }
+
+  getItemByReference(reference) {
+    console.log("get item by referenc", reference);
+      for (var i = this.length - 1; i >= 0; i--) {
+          console.log("checking (this[i].reference === reference)", this[i].reference, reference);
+          if (this[i].reference === reference) {
+              console.log("found index match", this[i].index);
+              return this[i].item;
+          }
+      }
   }
 
   remove(argument, _isTop) {

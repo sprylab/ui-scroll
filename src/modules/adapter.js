@@ -40,7 +40,7 @@ class Adapter {
 
   generatePublicContext($attr, $parse) {
     // these methods will be accessible out of ui-scroll via user defined adapter
-    const publicMethods = ['reload', 'applyUpdates', 'append', 'prepend', 'isBOF', 'isEOF', 'isEmpty'];
+    const publicMethods = ['reload', 'applyUpdates', 'append', 'prepend', 'isBOF', 'isEOF', 'isEmpty', 'removeByReference'];
     for (let i = publicMethods.length - 1; i >= 0; i--) {
       this.publicContext[publicMethods[i]] = this[publicMethods[i]].bind(this);
     }
@@ -193,6 +193,11 @@ class Adapter {
         break;
       }
     }
+  }
+
+  removeByReference(reference) {
+      console.log("remove by reference", reference);
+      return this.viewport.removeByReference(reference);
   }
 
 }
