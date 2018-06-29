@@ -224,17 +224,22 @@ export default function Viewport(elementRoutines, buffer, element, viewportContr
               return;
           }
 
-          console.log('remove item from cache', itemAbove || itemBelow);
-          this.removeCacheItem(itemAbove || itemBelow);
+          try {
+              console.log('remove item from cache', itemAbove || itemBelow);
+              this.removeCacheItem(itemAbove.item || itemBelow.item);
 
-          if(itemAbove){
-              console.log('item is from top padding');
-              // we try to delete a hidden item above
-              buffer.next --;
-              buffer.first--;
-              console.log('decremented buffer indices to buffer.next, buffer.first', buffer.next, buffer.first);
-          }
+              if (itemAbove) {
+                  console.log('item is from top padding');
+                  // we try to delete a hidden item above
+                  buffer.next--;
+                  buffer.first--;
 
+                  window.scrollTo(0, window.pageYOffset - itemAbove.height);
+
+                  console.log('decremented buffer indices to buffer.next, buffer.first', buffer.next, buffer.first);
+              }
+
+          } catch (e) {}
           return true;
       },
   });

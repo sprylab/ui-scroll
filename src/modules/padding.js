@@ -23,10 +23,9 @@ class CacheProto {
   getItemByReference(reference) {
     console.log('get item by reference', reference);
       for (var i = this.length - 1; i >= 0; i--) {
-          console.log('checking (this[i].reference === reference)', this[i].reference, reference);
           if (this[i].reference === reference) {
               console.log('found index match', this[i].index);
-              return this[i].item;
+              return this[i];
           }
       }
   }
