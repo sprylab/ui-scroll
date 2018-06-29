@@ -1,7 +1,7 @@
 /*!
  * angular-ui-scroll (uncompressed)
  * https://github.com/angular-ui/ui-scroll
- * Version: 1.7.0-rc.5 -- 2018-06-29T12:09:45.201Z
+ * Version: 1.7.0-rc.5 -- 2018-06-29T14:07:35.670Z
  * License: MIT
  */
 /******/ (function(modules) { // webpackBootstrap
@@ -1133,17 +1133,21 @@ function Viewport(elementRoutines, buffer, element, viewportController, $rootSco
         return;
       }
 
-      console.log('remove item from cache', itemAbove || itemBelow);
-      this.removeCacheItem(itemAbove || itemBelow);
+      try {
+        console.log('remove item from cache', itemAbove || itemBelow);
+        this.removeCacheItem(itemAbove.item || itemBelow.item);
 
-      if (itemAbove) {
-        console.log('item is from top padding');
-        // we try to delete a hidden item above
-        buffer.next--;
-        buffer.first--;
-        console.log('decremented buffer indices to buffer.next, buffer.first', buffer.next, buffer.first);
-      }
+        if (itemAbove) {
+          console.log('item is from top padding');
+          // we try to delete a hidden item above
+          buffer.next--;
+          buffer.first--;
 
+          window.scrollTo(0, window.pageYOffset - itemAbove.height);
+
+          console.log('decremented buffer indices to buffer.next, buffer.first', buffer.next, buffer.first);
+        }
+      } catch (e) {}
       return true;
     }
   });
@@ -1200,10 +1204,9 @@ var CacheProto = function () {
     value: function getItemByReference(reference) {
       console.log('get item by reference', reference);
       for (var i = this.length - 1; i >= 0; i--) {
-        console.log('checking (this[i].reference === reference)', this[i].reference, reference);
         if (this[i].reference === reference) {
           console.log('found index match', this[i].index);
-          return this[i].item;
+          return this[i];
         }
       }
     }
