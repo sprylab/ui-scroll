@@ -163,12 +163,6 @@ export default function Viewport(elementRoutines, buffer, element, viewportContr
       // paddings combine adjustment
       topPadding.height(topPaddingHeight + topPaddingHeightAdd);
       bottomPadding.height(bottomPaddingHeight + bottomPaddingHeightAdd);
-
-      if (buffer.eof) {
-        bottomPadding.height(0);
-      } else if (buffer.bof) {
-        topPadding.height(0);
-      }
     },
 
     onAfterMinIndexSet(topPaddingHeightOld) {
