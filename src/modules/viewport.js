@@ -1,3 +1,5 @@
+/*jslint devel: true */
+
 import Padding from './padding';
 
 export default function Viewport(elementRoutines, buffer, element, viewportController, $rootScope, padding) {
@@ -213,7 +215,7 @@ export default function Viewport(elementRoutines, buffer, element, viewportContr
     },
       removeByReference(reference) {
 
-          console.log("reference", reference);
+          console.log('reference', reference);
 
           var itemAbove = topPadding.cache.getItemByReference(reference);
           var itemBelow = bottomPadding.cache.getItemByReference(reference);
@@ -222,15 +224,15 @@ export default function Viewport(elementRoutines, buffer, element, viewportContr
               return;
           }
 
-          console.log("remove item from cache", itemAbove || itemBelow);
+          console.log('remove item from cache', itemAbove || itemBelow);
           this.removeCacheItem(itemAbove || itemBelow);
 
           if(itemAbove){
-              console.log("item is from top padding");
+              console.log('item is from top padding');
               // we try to delete a hidden item above
               buffer.next --;
               buffer.first--;
-              console.log("decremented buffer indices to buffer.next, buffer.first", buffer.next, buffer.first);
+              console.log('decremented buffer indices to buffer.next, buffer.first', buffer.next, buffer.first);
           }
 
           return true;

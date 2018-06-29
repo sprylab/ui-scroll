@@ -1,7 +1,7 @@
 /*!
  * angular-ui-scroll (uncompressed)
  * https://github.com/angular-ui/ui-scroll
- * Version: 1.7.0-rc.5 -- 2017-11-10T00:53:20.545Z
+ * Version: 1.7.0-rc.5 -- 2018-06-29T12:09:45.201Z
  * License: MIT
  */
 /******/ (function(modules) { // webpackBootstrap
@@ -87,6 +87,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/*jslint devel: true */
+
 var Adapter = function () {
   function Adapter(viewport, buffer, adjustBuffer, reload, $attr, $parse, $scope) {
     _classCallCheck(this, Adapter);
@@ -132,7 +134,7 @@ var Adapter = function () {
       var _this = this;
 
       // these methods will be accessible out of ui-scroll via user defined adapter
-      var publicMethods = ['reload', 'applyUpdates', 'append', 'prepend', 'isBOF', 'isEOF', 'isEmpty'];
+      var publicMethods = ['reload', 'applyUpdates', 'append', 'prepend', 'isBOF', 'isEOF', 'isEmpty', 'removeByReference'];
       for (var i = publicMethods.length - 1; i >= 0; i--) {
         this.publicContext[publicMethods[i]] = this[publicMethods[i]].bind(this);
       }
@@ -316,6 +318,12 @@ var Adapter = function () {
           break;
         }
       }
+    }
+  }, {
+    key: 'removeByReference',
+    value: function removeByReference(reference) {
+      console.log('remove by reference', reference);
+      return this.viewport.removeByReference(reference);
     }
   }]);
 
@@ -1113,11 +1121,35 @@ function Viewport(elementRoutines, buffer, element, viewportController, $rootSco
     removeItem: function removeItem(item) {
       this.removeCacheItem(item);
       return buffer.remove(item);
+    },
+    removeByReference: function removeByReference(reference) {
+
+      console.log('reference', reference);
+
+      var itemAbove = topPadding.cache.getItemByReference(reference);
+      var itemBelow = bottomPadding.cache.getItemByReference(reference);
+
+      if (!itemAbove && !itemBelow) {
+        return;
+      }
+
+      console.log('remove item from cache', itemAbove || itemBelow);
+      this.removeCacheItem(itemAbove || itemBelow);
+
+      if (itemAbove) {
+        console.log('item is from top padding');
+        // we try to delete a hidden item above
+        buffer.next--;
+        buffer.first--;
+        console.log('decremented buffer indices to buffer.next, buffer.first', buffer.next, buffer.first);
+      }
+
+      return true;
     }
   });
 
   return viewport;
-}
+} /*jslint devel: true */
 
 /***/ }),
 /* 5 */
@@ -1136,6 +1168,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 // Can't just extend the Array, due to Babel does not support built-in classes extending
 // This solution was taken from https://stackoverflow.com/questions/46897414/es6-class-extends-array-workaround-for-es5-babel-transpile
+
+/*jslint devel: true */
+
 var CacheProto = function () {
   function CacheProto() {
     _classCallCheck(this, CacheProto);
@@ -1152,11 +1187,25 @@ var CacheProto = function () {
       }
       this.push({
         index: item.scope.$index,
-        height: item.element.outerHeight()
+        height: item.element.outerHeight(),
+        reference: item.item.timestamp_published, // FIXME generic "reference" attribute should be provided
+        item: item
       });
       this.sort(function (a, b) {
         return a.index < b.index ? -1 : a.index > b.index ? 1 : 0;
       });
+    }
+  }, {
+    key: 'getItemByReference',
+    value: function getItemByReference(reference) {
+      console.log('get item by reference', reference);
+      for (var i = this.length - 1; i >= 0; i--) {
+        console.log('checking (this[i].reference === reference)', this[i].reference, reference);
+        if (this[i].reference === reference) {
+          console.log('found index match', this[i].index);
+          return this[i].item;
+        }
+      }
     }
   }, {
     key: 'remove',

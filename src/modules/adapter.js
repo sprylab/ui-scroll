@@ -1,3 +1,5 @@
+/*jslint devel: true */
+
 class Adapter {
 
   constructor(viewport, buffer, adjustBuffer, reload, $attr, $parse, $scope) {
@@ -196,7 +198,7 @@ class Adapter {
   }
 
   removeByReference(reference) {
-      console.log("remove by reference", reference);
+      console.log('remove by reference', reference);
       return this.viewport.removeByReference(reference);
   }
 

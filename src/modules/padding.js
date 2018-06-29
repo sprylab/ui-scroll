@@ -1,5 +1,8 @@
 // Can't just extend the Array, due to Babel does not support built-in classes extending
 // This solution was taken from https://stackoverflow.com/questions/46897414/es6-class-extends-array-workaround-for-es5-babel-transpile
+
+/*jslint devel: true */
+
 class CacheProto {
   add(item) {
     for (let i = this.length - 1; i >= 0; i--) {
@@ -18,11 +21,11 @@ class CacheProto {
   }
 
   getItemByReference(reference) {
-    console.log("get item by referenc", reference);
+    console.log('get item by reference', reference);
       for (var i = this.length - 1; i >= 0; i--) {
-          console.log("checking (this[i].reference === reference)", this[i].reference, reference);
+          console.log('checking (this[i].reference === reference)', this[i].reference, reference);
           if (this[i].reference === reference) {
-              console.log("found index match", this[i].index);
+              console.log('found index match', this[i].index);
               return this[i].item;
           }
       }
